@@ -5,13 +5,20 @@ from albumentations.pytorch import ToTensor
 class Transformations:
 
     def __init__(
-        self, horizontal_flip_prob=0.0, vertical_flip_prob=0.0, gaussian_blur_prob=0.0,
-        rotate_degree=0.0, cutout=0.0, cutout_height=0, cutout_width=0,
-        mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5), train=True
+        self, padding=(0, 0), crop=(0, 0), horizontal_flip_prob=0.0,
+        vertical_flip_prob=0.0, gaussian_blur_prob=0.0, rotate_degree=0.0,
+        cutout_prob=0.0, cutout_dim=(8, 8), mean=(0.5, 0.5, 0.5),
+        std=(0.5, 0.5, 0.5), train=True
     ):
         transforms_list = []
 
         if train:
+            if sum(padding) > 0:
+                transforms_list += [A.PadIfNeeded(
+                    min_height=padding[0], min_width=padding[1], always_apply=True
+                )]
+            if sum(crop) > 0:
+                transforms_list += [A.RandomCrop(crop[0], crop[1], always_apply=True)]
             if horizontal_flip_prob > 0:  # Horizontal Flip
                 transforms_list += [A.HorizontalFlip(p=horizontal_flip_prob)]
             if vertical_flip_prob > 0:  # Vertical Flip
@@ -20,12 +27,17 @@ class Transformations:
                 transforms_list += [A.GaussianBlur(p=gaussian_blur_prob)]
             if rotate_degree > 0:  # Rotate image
                 transforms_list += [A.Rotate(limit=rotate_degree)]
-            if cutout > 0:  # CutOut
+            if cutout_prob > 0:  # CutOut
+                if isinstance(mean, float):
+                    fill_value = mean * 255.0
+                else:
+                    fill_value = tuple([x * 255.0 for x in mean])
                 transforms_list += [A.CoarseDropout(
-                    p=cutout, max_holes=1, fill_value=tuple([x * 255.0 for x in mean]),
-                    max_height=cutout_height, max_width=cutout_width, min_height=1, min_width=1
+                    p=cutout_prob, max_holes=1, fill_value=fill_value,
+                    max_height=cutout_dim[0], max_width=cutout_dim[1]
                 )]
         
+
         transforms_list += [
             A.Normalize(mean=mean, std=std, always_apply=True),
             ToTensor()
