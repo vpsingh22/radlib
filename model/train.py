@@ -1,5 +1,5 @@
 from tqdm import tqdm
-from model.regularizer import l1_regularization
+from .regularizer import l1_regularization
 
 
 def train(model, loader, device, optimizer, criterion, l1_factor=0.0):
@@ -32,3 +32,5 @@ def train(model, loader, device, optimizer, criterion, l1_factor=0.0):
         pbar.set_description(
             desc=f'Loss={loss.item():0.2f} Batch_ID={batch_idx} Accuracy={(100 * correct / processed):.2f}'
         )
+        accuracy = (100*correct/processed)
+    return loss, accuracy
