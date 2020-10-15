@@ -2,7 +2,7 @@ import numpy as np
 import albumentations as A
 from albumentations.pytorch import ToTensor
 
-class Transformations:
+class Transforms:
 
     def __init__(
         self, padding=(0, 0), crop=(0, 0), horizontal_flip_prob=0.0,
