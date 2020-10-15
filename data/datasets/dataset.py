@@ -2,8 +2,8 @@ import os
 import numpy as np
 import torch
 
-from tensornet.data.processing import Transformations, data_loader
-from tensornet.data.utils import unnormalize, normalize
+from radlib.data.processing import Transformations, data_loader
+from radlib.data.utils import unnormalize, normalize
 
 
 class BaseDataset:

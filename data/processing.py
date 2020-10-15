@@ -5,7 +5,7 @@ from albumentations.pytorch import ToTensor
 
 
 class Transformations:
-    """Wrapper class to pass on albumentaions transforms into PyTorch."""
+    """Wrapper class to pass on albumentations transforms into PyTorch."""
 
     def __init__(
         self, resize=(0, 0), padding=(0, 0), crop=(0, 0), horizontal_flip_prob=0.0,
