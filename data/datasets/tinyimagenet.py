@@ -9,7 +9,7 @@ from io import BytesIO
 from PIL import Image
 from torch.utils.data import Dataset
 
-from tensornet.data.datasets.dataset import BaseDataset
+from radlib.data.datasets.dataset import BaseDataset
 
 
 class TinyImageNet(BaseDataset):
